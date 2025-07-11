@@ -1,6 +1,13 @@
 // ===========================
 //  CONSTANTES / UTILITAIRES
 // ===========================
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js')
+    .then(() => console.log('✅ Service Worker enregistré'))
+    .catch(err => console.error('❌ Erreur SW', err));
+}
+
 const highRiskZones = [{
         name: 'Andohalo',
         lat: -18.9184,
@@ -209,18 +216,21 @@ function renderNearbyZones(list) {
 //  NOTIFICATIONS (facultatif)
 // ==========================
 async function notifyOnce(name, dist) {
-    if (notified.has(name)) return; // déjà envoyé
-    if (!('Notification' in window)) return;
+  if (notified.has(name)) return;
+  if (Notification.permission !== 'granted') return;
 
-    const permission = await Notification.requestPermission();
-    if (permission !== 'granted') return;
+  const options = {
+    body: `⚠️ Zone à haut risque : ${name} à ${dist} m`,
+    icon: '/logo.png',
+    badge: '/logo.png',
+    tag: `risk-${name}`
+  };
 
-    // Service-worker non indispensable : on peut créer directement
-    new Notification('Aro Sécurité', {
-        body: `⚠️ Zone à haut risque : ${name} à ${dist} m`,
-        icon: '/icon-warning.png',
-        badge: '/icon-badge.png',
-        tag: `risk-${name}`
-    });
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    reg.showNotification('Aro Sécurité', options);
     notified.add(name);
+  } catch (err) {
+    console.error('Erreur notification mobile :', err);
+  }
 }
