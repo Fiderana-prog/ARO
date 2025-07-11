@@ -77,7 +77,7 @@
       }
 
     } else {
-      toggleBtn.classList.add('bg-gray-300');
+      toggleBtn.classList.add('bg-black');
       toggleBtn.classList.remove('bg-[var(--safe-green)]');
       toggleText.classList.remove('hidden');
       toggleSpinner.classList.add('hidden');
