@@ -228,25 +228,21 @@ async function notifyOnce(name, dist) {
 
     try {
         const reg = await navigator.serviceWorker.ready;
-        reg.showNotification('Aro Sécurité', options);
-        notified.add(name);
-    } catch (err) {
-        console.error('Erreur notification mobile :', err);
-    }
-    try {
-        const reg = await navigator.serviceWorker.ready;
+
+        // ✅ Affiche la notification
         reg.showNotification('Aro Sécurité', options);
 
-        // ✅ Joue un son si l’utilisateur est encore sur la page
+        // ✅ Joue le son si la page est visible
         if (document.visibilityState === 'visible') {
             const alarm = new Audio('/alarm.mp3');
-            alarm.play().catch(err => {
-                console.warn('Impossible de jouer le son :', err);
+            await alarm.play().catch(err => {
+                console.warn('🔇 Son bloqué ou refusé :', err);
             });
         }
 
+        // Marque comme notifié
         notified.add(name);
     } catch (err) {
-        console.error('Erreur notification mobile :', err);
+        console.error('❌ Erreur lors de la notification :', err);
     }
 }
