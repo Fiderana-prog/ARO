@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aro - Trajet Sûr</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <!-- Police -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+
+    <!-- Variables & font -->
+    <style type="text/tailwindcss">
+        :root{
+      --safe-green:#22c55e;
+      --danger-red:#ef4444;
+      --light-gray:#f9fafb;
+      --medium-gray:#e5e7eb;
+      --dark-gray:#4b5563;
+      --text-color:#111827;
+      --primary-blue:#3b82f6;
+      --white:#ffffff;
+    }
+    body{font-family:"Plus Jakarta Sans",sans-serif;}
+  </style>
+</head>
+
+<body class="bg-light-gray">
+    <div class="flex flex-col h-screen max-w-md mx-auto bg-white shadow-lg">
+
+        <!-- Header dynamique -->
+        <header id="appHeader" class="p-4 flex items-center justify-between border-b border-medium-gray bg-white">
+            <div></div><!-- placeholder gauche -->
+            <h1 id="headerTitle" class="text-lg font-semibold text-text-color">Carte</h1>
+            <div></div><!-- placeholder droite -->
+        </header>
+
+        <!-- Contenu -->
+        <main class="flex-grow overflow-y-auto bg-gray-50">
+            <!-- SECTION : ACCUEIL -->
+            <section id="sectionHome" class="p-6 space-y-6">
+                <h2 class="text-xl font-semibold text-text-color">Accueil</h2>
+
+                <!-- Toggle tracking -->
+                <button id="toggleTracking" class="w-full py-3 rounded-lg text-white font-semibold transition
+                       bg-gray-400 hover:brightness-105 active:scale-95">
+                    Activer le tracking
+                </button>
+
+                <p id="trackingStatus" class="text-center text-sm text-dark-gray">
+                    Tracking désactivé
+                </p>
+            </section>
+
+            <!-- SECTION : CARTE / DESTINATIONS (contenu existant) -->
+            <!-- SECTION : CARTE (caché) -->
+            <section id="sectionMap" class="hidden">
+
+                <!-- Inputs -->
+                <div class="p-4 space-y-4">
+                    <div class="flex items-start space-x-3">
+                        <div class="flex flex-col items-center mt-2">
+                            <span class="block w-3 h-3 rounded-full bg-primary-blue"></span>
+                            <span class="block w-px h-10 bg-gray-300"></span>
+                            <span class="block w-3 h-3 rounded-full bg-medium-gray"></span>
+                        </div>
+                        <div class="flex-1 space-y-3">
+                            <div class="relative">
+                                <input type="text" value="Avenue des Champs-Élysées, Paris"
+                                    placeholder="Votre position actuelle" class="w-full h-12 pl-4 pr-10 rounded-lg border border-gray-300 bg-white
+                              focus:ring-2 focus:outline-none focus:ring-primary-blue text-gray-900" />
+                                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="relative">
+                                <input type="text" placeholder="Où allez-vous ?" class="w-full h-12 pl-4 pr-10 rounded-lg border border-gray-300 bg-white
+                              focus:ring-2 focus:outline-none focus:ring-primary-blue text-gray-900" />
+                                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map preview -->
+                <div class="px-4 pb-4">
+                    <div class="w-full h-64 bg-center bg-cover rounded-2xl shadow-md"
+                        style="background-image:url('https://via.placeholder.com/400x300');"></div>
+                </div>
+
+                <!-- Options d'itinéraire -->
+                <div class="px-4 pb-24">
+                    <div class="bg-white rounded-2xl p-4 shadow-sm">
+                        <!-- ... (buttons déjà présents) ... -->
+                        <p class="text-center text-sm text-dark-gray">
+                            Choisissez votre mode et votre type d’itinéraire
+                        </p>
+                    </div>
+                </div>
+            </section>
+            <!-- SECTION : PACKAGING -->
+            <section id="sectionPackaging" class="p-6 space-y-4 hidden">
+                <h2 class="text-xl font-semibold text-text-color mb-2">Packs disponibles</h2>
+
+                <ul class="space-y-3">
+                    <li class="bg-white rounded-lg p-4 shadow-sm flex items-center justify-between">
+                        <span class="font-medium text-gray-800">Antananarivo</span>
+                        <button
+                            class="text-sm text-white bg-primary-blue px-4 py-1.5 rounded-md hover:brightness-110">Télécharger</button>
+                    </li>
+                    <li class="bg-white rounded-lg p-4 shadow-sm flex items-center justify-between">
+                        <span class="font-medium text-gray-800">Fianarantsoa</span>
+                        <button
+                            class="text-sm text-white bg-primary-blue px-4 py-1.5 rounded-md hover:brightness-110">Télécharger</button>
+                    </li>
+                    <li class="bg-white rounded-lg p-4 shadow-sm flex items-center justify-between">
+                        <span class="font-medium text-gray-800">Toamasina</span>
+                        <button
+                            class="text-sm text-white bg-primary-blue px-4 py-1.5 rounded-md hover:brightness-110">Télécharger</button>
+                    </li>
+                    <li class="bg-white rounded-lg p-4 shadow-sm flex items-center justify-between">
+                        <span class="font-medium text-gray-800">Mahajanga</span>
+                        <button
+                            class="text-sm text-white bg-primary-blue px-4 py-1.5 rounded-md hover:brightness-110">Télécharger</button>
+                    </li>
+                    <li class="bg-white rounded-lg p-4 shadow-sm flex items-center justify-between">
+                        <span class="font-medium text-gray-800">Toliara</span>
+                        <button
+                            class="text-sm text-white bg-primary-blue px-4 py-1.5 rounded-md hover:brightness-110">Télécharger</button>
+                    </li>
+                    <li class="bg-white rounded-lg p-4 shadow-sm flex items-center justify-between">
+                        <span class="font-medium text-gray-800">Antsiranana</span>
+                        <button
+                            class="text-sm text-white bg-primary-blue px-4 py-1.5 rounded-md hover:brightness-110">Télécharger</button>
+                    </li>
+                </ul>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="fixed bottom-0 left-0 right-0 max-w-md mx-auto flex justify-around items-center
+                   p-2 border-t border-medium-gray bg-white">
+            <!-- Accueil -->
+            <a id="navHome"
+                class="flex flex-col items-center gap-1 text-primary-blue bg-blue-50 font-bold shadow-inner py-1 w-1/3 cursor-pointer">
+                <svg class="w-6 h-6 transition-transform" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4m-6 0h6" />
+                </svg>
+                <span class="text-xs">Accueil</span>
+            </a>
+
+            <!-- Carte (par défaut actif) -->
+            <a id="navMap"
+                class="flex flex-col items-center gap-1 text-gray-500 py-1 w-1/3 hover:text-primary-blue cursor-pointer">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M12 1.586l-4 4v12.828l4-4V1.586zM3.707 3.293A1 1 0 002 4v12a1 1 0 00.293.707L6 20.414V5.586L3.707 3.293zM17.707 5.293L14 1.586v14.828l3.707-3.707A1 1 0 0018 12V6a1 1 0 00-.293-.707z" />
+                </svg>
+                <span class="text-xs font-bold">Carte</span>
+            </a>
+
+            <!-- Profil -->
+            <a id="navPackaging"
+                class="flex flex-col items-center gap-1 text-gray-500 py-1 w-1/3 hover:text-primary-blue cursor-pointer">
+                <!-- Icône “package” -->
+                <svg class="w-6 h-6 transition-transform" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24">
+                    <!-- boite fermée -->
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3 7l9 5 9-5M5 19V8l7 4 7-4v11a2 2 0 01-2 2H7a2 2 0 01-2-2z" />
+                </svg>
+                <span class="text-xs">Packages</span>
+            </a>
+
+        </footer>
+    </div>
+
+    <!-- Interactivité -->
+    <script>
+        // Navigation & Sections
+        const navHome = document.getElementById('navHome');
+        const navMap = document.getElementById('navMap');
+        const navPackaging = document.getElementById('navPackaging');
+
+        const header = document.getElementById('headerTitle');
+        const sectionHome = document.getElementById('sectionHome');
+        const sectionMap = document.getElementById('sectionMap');
+        const sectionPackaging = document.getElementById('sectionPackaging');
+
+        // Tracking toggle
+        const toggleBtn = document.getElementById('toggleTracking');
+        const statusTxt = document.getElementById('trackingStatus');
+        let trackingOn = false;
+
+        // Activer/désactiver le suivi
+        toggleBtn.addEventListener('click', () => {
+            trackingOn = !trackingOn;
+            if (trackingOn) {
+                toggleBtn.textContent = 'Désactiver le tracking';
+                toggleBtn.classList.remove('bg-gray-400');
+                toggleBtn.classList.add('bg-[var(--safe-green)]');
+                statusTxt.textContent = 'Tracking activé';
+            } else {
+                toggleBtn.textContent = 'Activer le tracking';
+                toggleBtn.classList.add('bg-gray-400');
+                toggleBtn.classList.remove('bg-[var(--safe-green)]');
+                statusTxt.textContent = 'Tracking désactivé';
+            }
+        });
+
+        // Fonction de navigation
+        function setActive(tab) {
+            // Réinitialiser le style des onglets
+            [navHome, navMap, navPackaging].forEach(el => {
+                el.classList.remove('text-primary-blue', 'bg-blue-50', 'font-bold', 'shadow-inner');
+                el.classList.add('text-gray-500');
+            });
+
+            // Cacher toutes les sections
+            sectionHome.classList.add('hidden');
+            sectionMap.classList.add('hidden');
+            sectionPackaging.classList.add('hidden');
+
+            // Afficher la bonne section
+            if (tab === 'home') {
+                navHome.classList.add('text-primary-blue', 'bg-blue-50', 'font-bold', 'shadow-inner');
+                header.textContent = 'Accueil';
+                sectionHome.classList.remove('hidden');
+            } else if (tab === 'packaging') {
+                navPackaging.classList.add('text-primary-blue', 'bg-blue-50', 'font-bold', 'shadow-inner');
+                header.textContent = 'Packages';
+                sectionPackaging.classList.remove('hidden');
+            } else {
+                navMap.classList.add('text-primary-blue', 'bg-blue-50', 'font-bold', 'shadow-inner');
+                header.textContent = 'Carte';
+                sectionMap.classList.remove('hidden');
+            }
+        }
+
+        // Écouteurs d'événements pour les onglets
+        navHome.addEventListener('click', () => setActive('home'));
+        navMap.addEventListener('click', () => setActive('map'));
+        navPackaging.addEventListener('click', () => setActive('packaging'));
+    </script>
+
+</body>
+
+</html>
