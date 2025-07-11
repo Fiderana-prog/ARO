@@ -3,9 +3,9 @@
 // ===========================
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js')
-    .then(() => console.log('✅ Service Worker enregistré'))
-    .catch(err => console.error('❌ Erreur SW', err));
+    navigator.serviceWorker.register('/sw.js')
+        .then(() => console.log('✅ Service Worker enregistré'))
+        .catch(err => console.error('❌ Erreur SW', err));
 }
 
 const highRiskZones = [{
@@ -216,21 +216,37 @@ function renderNearbyZones(list) {
 //  NOTIFICATIONS (facultatif)
 // ==========================
 async function notifyOnce(name, dist) {
-  if (notified.has(name)) return;
-  if (Notification.permission !== 'granted') return;
+    if (notified.has(name)) return;
+    if (Notification.permission !== 'granted') return;
 
-  const options = {
-    body: `⚠️ Zone à haut risque : ${name} à ${dist} m`,
-    icon: '/logo.png',
-    badge: '/logo.png',
-    tag: `risk-${name}`
-  };
+    const options = {
+        body: `⚠️ Zone à haut risque : ${name} à ${dist} m`,
+        icon: '/logo.png',
+        badge: '/logo.png',
+        tag: `risk-${name}`
+    };
 
-  try {
-    const reg = await navigator.serviceWorker.ready;
-    reg.showNotification('Aro Sécurité', options);
-    notified.add(name);
-  } catch (err) {
-    console.error('Erreur notification mobile :', err);
-  }
+    try {
+        const reg = await navigator.serviceWorker.ready;
+        reg.showNotification('Aro Sécurité', options);
+        notified.add(name);
+    } catch (err) {
+        console.error('Erreur notification mobile :', err);
+    }
+    try {
+        const reg = await navigator.serviceWorker.ready;
+        reg.showNotification('Aro Sécurité', options);
+
+        // ✅ Joue un son si l’utilisateur est encore sur la page
+        if (document.visibilityState === 'visible') {
+            const alarm = new Audio('/alarm.mp3');
+            alarm.play().catch(err => {
+                console.warn('Impossible de jouer le son :', err);
+            });
+        }
+
+        notified.add(name);
+    } catch (err) {
+        console.error('Erreur notification mobile :', err);
+    }
 }
