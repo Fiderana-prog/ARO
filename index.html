@@ -31,10 +31,17 @@
     }
     body{font-family:"Plus Jakarta Sans",sans-serif;}
   </style>
-
+    <script type="module"
+        src="https://ajax.googleapis.com/ajax/libs/@googlemaps/extended-component-library/0.6.11/index.min.js">
+    </script>
+    <script type="module" src="https://unpkg.com/@googlemaps/extended-component-library">
+    </script>
 </head>
 
 <body class="bg-light-gray">
+    <gmpx-api-loader key="AIzaSyCUThzLofDg4CaHG830eBr41piSUW9fSv8" solution-channel="GMP_GE_placepicker_v2">
+    </gmpx-api-loader>
+
     <div class="flex flex-col h-screen max-w-md mx-auto bg-white shadow-lg">
 
         <!-- Header dynamique -->
@@ -94,64 +101,45 @@
                         Localisation non détectée
                     </p>
                 </div>
+                <div id="nearestZones" class="w-full max-w-sm bg-red-50 p-4 rounded-xl border border-red-200">
+                    <h4 class="text-red-600 font-semibold mb-2">🚨 Zones à risque proches</h4>
+                    <ul id="nearestZonesList" class="list-disc list-inside text-red-700 space-y-1 text-sm">
+                        <li>Calcul en cours…</li>
+                    </ul>
+                </div>
+
             </section>
             <!-- SECTION : CARTE (caché) -->
-            <section id="sectionMap" class="hidden">
 
-                <!-- Inputs -->
-                <div class="p-4 space-y-4">
-                    <div class="flex items-start space-x-3">
-                        <div class="flex flex-col items-center mt-2">
-                            <span class="block w-3 h-3 rounded-full bg-primary-blue"></span>
-                            <span class="block w-px h-10 bg-gray-300"></span>
-                            <span class="block w-3 h-3 rounded-full bg-medium-gray"></span>
-                        </div>
-                        <div class="flex-1 space-y-3">
-                            <div class="relative">
-                                <input type="text" value="Avenue des Champs-Élysées, Paris"
-                                    placeholder="Votre position actuelle" class="w-full h-12 pl-4 pr-10 rounded-lg border border-gray-300 bg-white
-                              focus:ring-2 focus:outline-none focus:ring-primary-blue text-gray-900" />
-                                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    </svg>
-                                </span>
-                            </div>
-                            <div class="relative">
-                                <input type="text" placeholder="Où allez-vous ?" class="w-full h-12 pl-4 pr-10 rounded-lg border border-gray-300 bg-white
-                              focus:ring-2 focus:outline-none focus:ring-primary-blue text-gray-900" />
-                                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                    </svg>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+
+            <!-- SECTION : MAP / TRAJET ------------------------------------------------ -->
+            <section id="sectionMap" class="p-4 space-y-6">
+                <h2 class="text-xl font-semibold">Planifiez votre trajet</h2>
+
+                <!-- Zone d’inputs ------------------------------------------------- -->
+                <div class="bg-white p-5 rounded-2xl shadow space-y-4">
+                    <input id="originInput" placeholder="Lieu de départ"
+                        class="w-full h-12 rounded-lg border border-gray-300 px-3 focus:ring-2 focus:ring-primary-blue outline-none" />
+
+                    <input id="destInput" placeholder="Lieu d’arrivée"
+                        class="w-full h-12 rounded-lg border border-gray-300 px-3 focus:ring-2 focus:ring-primary-blue outline-none" />
+
+                    <button id="showRoute" class="w-full bg-primary-blue text-white py-3 rounded-lg font-medium
+          hover:brightness-105 active:scale-95 transition">
+                        ➜ Afficher l’itinéraire
+                    </button>
                 </div>
-
-                <!-- Map preview -->
-                <div class="px-4 pb-4">
-                    <div class="w-full h-64 bg-center bg-cover rounded-2xl shadow-md"
-                        style="background-image:url('https://via.placeholder.com/400x300');"></div>
-                </div>
-
-                <!-- Options d'itinéraire -->
-                <div class="px-4 pb-24">
-                    <div class="bg-white rounded-2xl p-4 shadow-sm">
-                        <!-- ... (buttons déjà présents) ... -->
-                        <p class="text-center text-sm text-dark-gray">
-                            Choisissez votre mode et votre type d’itinéraire
-                        </p>
-                    </div>
+                <div class="relative">
+                    <div id="myMap" class="w-full h-80 rounded-2xl shadow"></div>
                 </div>
             </section>
+
+
+
+
+
+
+
             <!-- SECTION : PACKAGING -->
             <section id="sectionPackaging" class="p-6 space-y-4 hidden">
                 <h2 class="text-xl font-bold text-text-color mb-4">📦 Packs disponibles</h2>
@@ -251,7 +239,8 @@
                 rounded-full transition-all duration-300
                 text-gray-500 group-[.active]:bg-primary-blue group-[.active]:text-white
                 hover:bg-blue-50 hover:text-primary-blue">
-                <i class="fas fa-map-location-dot text-black  text-lg transition-all duration-300 group-[.active]:text-white"></i>
+                <i
+                    class="fas fa-map-location-dot text-black  text-lg transition-all duration-300 group-[.active]:text-white"></i>
 
             </button>
 
@@ -259,7 +248,8 @@
                 rounded-full transition-all duration-300
                 text-gray-500 group-[.active]:bg-primary-blue group-[.active]:text-white
                 hover:bg-blue-50 hover:text-primary-blue">
-                <i class="fas fa-box-open text-lg text-black  transition-all duration-300 group-[.active]:text-white"></i>
+                <i
+                    class="fas fa-box-open text-lg text-black  transition-all duration-300 group-[.active]:text-white"></i>
             </button>
 
         </footer>
@@ -267,8 +257,10 @@
 
     <!-- Interactivité -->
     <script src="./main.js">
-
     </script>
+    <script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"></script>
+  
+
 
 
 </body>
