@@ -44,19 +44,42 @@
         <!-- Contenu -->
         <main class="flex-grow overflow-y-auto bg-gray-50">
             <!-- SECTION : ACCUEIL -->
-            <section id="sectionHome" class="p-6 space-y-6">
-                <h2 class="text-xl font-semibold text-text-color">Accueil</h2>
+            <section id="sectionHome"
+                class="flex flex-col items-center justify-center h-[calc(100vh-100px)] px-6 space-y-6">
 
-                <!-- Toggle tracking -->
-                <button id="toggleTracking" class="w-full py-3 rounded-lg text-white font-semibold transition
-                       bg-gray-400 hover:brightness-105 active:scale-95">
-                    Activer le tracking
-                </button>
+                <!-- Bouton rond XL -->
+                <div class="flex justify-center">
+                    <button id="toggleTracking" class="w-36 h-36 rounded-full flex items-center justify-center text-white text-base font-semibold transition-all
+             bg-gray-300 hover:brightness-105 active:scale-95 shadow-lg duration-300">
+                        Activer
+                    </button>
+                </div>
 
+                <!-- Loader -->
+                <div id="loader" class="flex justify-center hidden">
+                    <svg class="animate-spin h-10 w-10 text-primary-blue" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                        </circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                    </svg>
+                </div>
+
+                <!-- Statut -->
                 <p id="trackingStatus" class="text-center text-sm text-dark-gray">
                     Tracking désactivé
                 </p>
+
+                <!-- Localisation -->
+                <div class="text-center space-y-1">
+                    <h3 class="text-sm font-medium text-gray-700">Votre position actuelle</h3>
+                    <p id="userLocation" class="text-sm text-blue-600 underline hover:text-blue-800 transition-colors">
+                        Localisation non détectée
+                    </p>
+                </div>
             </section>
+
+
 
             <!-- SECTION : CARTE / DESTINATIONS (contenu existant) -->
             <!-- SECTION : CARTE (caché) -->
@@ -198,7 +221,7 @@
 
     <!-- Interactivité -->
     <script>
-        // Navigation & Sections
+        // Éléments DOM
         const navHome = document.getElementById('navHome');
         const navMap = document.getElementById('navMap');
         const navPackaging = document.getElementById('navPackaging');
@@ -208,41 +231,74 @@
         const sectionMap = document.getElementById('sectionMap');
         const sectionPackaging = document.getElementById('sectionPackaging');
 
-        // Tracking toggle
         const toggleBtn = document.getElementById('toggleTracking');
+        const loader = document.getElementById('loader');
         const statusTxt = document.getElementById('trackingStatus');
+        const locationTxt = document.getElementById('userLocation');
+
         let trackingOn = false;
 
-        // Activer/désactiver le suivi
+        // Activer / désactiver tracking avec animation de 3 secondes
         toggleBtn.addEventListener('click', () => {
-            trackingOn = !trackingOn;
-            if (trackingOn) {
-                toggleBtn.textContent = 'Désactiver le tracking';
-                toggleBtn.classList.remove('bg-gray-400');
-                toggleBtn.classList.add('bg-[var(--safe-green)]');
-                statusTxt.textContent = 'Tracking activé';
-            } else {
-                toggleBtn.textContent = 'Activer le tracking';
-                toggleBtn.classList.add('bg-gray-400');
-                toggleBtn.classList.remove('bg-[var(--safe-green)]');
-                statusTxt.textContent = 'Tracking désactivé';
-            }
+            loader.classList.remove('hidden');
+            toggleBtn.disabled = true;
+
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                toggleBtn.disabled = false;
+                trackingOn = !trackingOn;
+
+                if (trackingOn) {
+                    toggleBtn.textContent = 'Désactiver';
+                    toggleBtn.classList.remove('bg-gray-300');
+                    toggleBtn.classList.add('bg-[var(--safe-green)]');
+                    statusTxt.textContent = 'Tracking activé — surveillance en cours';
+                } else {
+                    toggleBtn.textContent = 'Activer';
+                    toggleBtn.classList.add('bg-gray-300');
+                    toggleBtn.classList.remove('bg-[var(--safe-green)]');
+                    statusTxt.textContent = 'Tracking désactivé';
+                }
+
+            }, 3000);
         });
 
-        // Fonction de navigation
+        // Mise à jour de la localisation en lien vers Google Maps
+        function updateLocation(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            const mapUrl = `https://www.google.com/maps?q=${lat},${lon}`;
+            locationTxt.innerHTML = `<a href="${mapUrl}" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline hover:text-blue-800">
+      Voir sur Google Maps
+    </a>`;
+        }
+
+        function locationError() {
+            locationTxt.textContent = "Accès à la localisation refusé.";
+        }
+
+        // Demander la géolocalisation
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(updateLocation, locationError);
+            navigator.geolocation.watchPosition(updateLocation, locationError, {
+                enableHighAccuracy: true,
+                maximumAge: 10000
+            });
+        } else {
+            locationTxt.textContent = "La géolocalisation n’est pas supportée.";
+        }
+
+        // Navigation entre onglets
         function setActive(tab) {
-            // Réinitialiser le style des onglets
             [navHome, navMap, navPackaging].forEach(el => {
                 el.classList.remove('text-primary-blue', 'bg-blue-50', 'font-bold', 'shadow-inner');
                 el.classList.add('text-gray-500');
             });
 
-            // Cacher toutes les sections
             sectionHome.classList.add('hidden');
             sectionMap.classList.add('hidden');
             sectionPackaging.classList.add('hidden');
 
-            // Afficher la bonne section
             if (tab === 'home') {
                 navHome.classList.add('text-primary-blue', 'bg-blue-50', 'font-bold', 'shadow-inner');
                 header.textContent = 'Accueil';
@@ -258,11 +314,15 @@
             }
         }
 
-        // Écouteurs d'événements pour les onglets
+        // Écouteurs sur le footer
         navHome.addEventListener('click', () => setActive('home'));
         navMap.addEventListener('click', () => setActive('map'));
         navPackaging.addEventListener('click', () => setActive('packaging'));
+
+        // Afficher Accueil par défaut
+        setActive('home');
     </script>
+
 
 </body>
 
