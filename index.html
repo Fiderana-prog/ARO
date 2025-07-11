@@ -29,7 +29,26 @@
       --white:#ffffff;
     }
     body{font-family:"Plus Jakarta Sans",sans-serif;}
-  </style>
+            @keyframes pulse-slow {
+
+                0%,
+                100% {
+                    transform: scale(1);
+                    opacity: .7;
+                }
+
+                50% {
+                    transform: scale(1.1);
+                    opacity: 1;
+                }
+            }
+
+            .animate-pulse-slow {
+                animation: pulse-slow 2s infinite;
+            }
+        </style>
+
+    </style>
 </head>
 
 <body class="bg-light-gray">
@@ -194,37 +213,33 @@
         </main>
 
         <!-- Footer -->
-        <footer class="fixed bottom-4 left-1/2 -translate-x-1/2 w-[92%] max-w-md mx-auto 
-                bg-white rounded-2xl shadow-md flex justify-around items-center px-4 py-2
-                border border-gray-200">
+        <footer class="fixed bottom-4 left-1/2 transform -translate-x-1/2 
+               w-[90%] max-w-md bg-white rounded-full shadow-lg
+               p-2 flex justify-between items-center relative">
 
-            <!-- Accueil -->
-            <button id="navHome" class="group flex flex-col items-center w-1/3 text-primary-blue">
-                <div class="bg-blue-50 rounded-full p-3 shadow-inner transition-all group-hover:scale-105">
-                    <i class="fas fa-house text-lg"></i>
-                </div>
-                <span class="text-xs mt-1 font-medium">Accueil</span>
+            <!-- Curseur animé -->
+            <div id="navIndicator" class="absolute top-1/2 -translate-y-1/2 w-14 h-14 bg-[var(--primary-blue)] 
+              rounded-full transition-all duration-300 ease-out
+              animate-pulse-slow"></div>
+
+            <!-- Boutons -->
+            <button data-tab="home" id="navHome" class="relative flex-1 flex items-center justify-center z-10 text-gray-500 
+                 hover:text-white transition-colors">
+                <i class="fas fa-house text-xl"></i>
             </button>
 
-            <!-- Carte -->
-            <button id="navMap"
-                class="group flex flex-col items-center w-1/3 text-gray-500 hover:text-primary-blue transition-all">
-                <div class="rounded-full p-3 transition-all group-hover:bg-blue-50 group-hover:scale-105">
-                    <i class="fas fa-map-location-dot text-lg"></i>
-                </div>
-                <span class="text-xs mt-1 font-medium">Carte</span>
+            <button data-tab="map" id="navMap" class="relative flex-1 flex items-center justify-center z-10 text-gray-500 
+                 hover:text-white transition-colors">
+                <i class="fas fa-map-marked-alt text-xl"></i>
             </button>
 
-            <!-- Packages -->
-            <button id="navPackaging"
-                class="group flex flex-col items-center w-1/3 text-gray-500 hover:text-primary-blue transition-all">
-                <div class="rounded-full p-3 transition-all group-hover:bg-blue-50 group-hover:scale-105">
-                    <i class="fas fa-box-open text-lg"></i>
-                </div>
-                <span class="text-xs mt-1 font-medium">Packages</span>
+            <button data-tab="packages" id="navPackaging" class="relative flex-1 flex items-center justify-center z-10 text-gray-500 
+                 hover:text-white transition-colors">
+                <i class="fas fa-box-open text-xl"></i>
             </button>
-
         </footer>
+
+        <!-- Animation “slow pulse” custom -->
 
     </div>
 
