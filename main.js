@@ -148,35 +148,54 @@ function stopTracking() {
 //  MISE À JOUR DE LA POSITION
 // ==================================
 async function updatePosition() {
-    if (!('geolocation' in navigator)) {
-        statusTxt.textContent = "Géolocalisation non supportée.";
-        return;
+  const statusTxt = document.getElementById('trackingStatus');
+  const userLocation = document.getElementById('userLocation');
+  const mapContainer = document.getElementById('mapContainer');
+
+  if (!('geolocation' in navigator)) {
+    statusTxt.textContent = "Géolocalisation non supportée.";
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      const { latitude: lat, longitude: lng } = pos.coords;
+
+      // Lien cliquable
+      const link = `https://www.google.com/maps?q=${lat},${lng}`;
+      userLocation.innerHTML = `
+        <a href="${link}" target="_blank" class="underline hover:text-blue-800">
+          Voir sur Google Maps
+        </a>`;
+
+      // Carte intégrée
+      if (mapContainer) {
+        mapContainer.innerHTML = `
+          <iframe
+            class="w-full h-64 rounded-lg shadow"
+            frameborder="0"
+            style="border:0"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen
+            loading="lazy"
+            src="https://maps.google.com/maps?q=${lat},${lng}&z=15&output=embed">
+          </iframe>`;
+      }
+
+      checkHighRisk(lat, lng); // ta fonction existante
+    },
+    err => {
+      console.error(err);
+      statusTxt.textContent = "Erreur de localisation.";
+    },
+    {
+      enableHighAccuracy: true,
+      maximumAge: 0,
+      timeout: 5000,
     }
-
-    navigator.geolocation.getCurrentPosition(
-        pos => {
-            const {
-                latitude: lat,
-                longitude: lng
-            } = pos.coords;
-            // Affiche le lien Google Maps
-            const link = `https://www.google.com/maps?q=${lat},${lng}`;
-            userLocation.innerHTML =
-                `<a href="${link}" target="_blank"
-            class="underline hover:text-blue-800">${link}</a>`;
-
-            checkHighRisk(lat, lng);
-        },
-        err => {
-            console.error(err);
-            statusTxt.textContent = "Erreur de localisation.";
-        }, {
-            enableHighAccuracy: true,
-            maximumAge: 0,
-            timeout: 5000
-        }
-    );
+  );
 }
+
 
 // ==================================
 //  CALCUL & AFFICHAGE DES ZONES

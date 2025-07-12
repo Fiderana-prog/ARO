@@ -38,11 +38,10 @@
     </script>
 </head>
 
-<body class="bg-light-gray">
-    <gmpx-api-loader key="AIzaSyCUThzLofDg4CaHG830eBr41piSUW9fSv8" solution-channel="GMP_GE_placepicker_v2">
-    </gmpx-api-loader>
+<body class="bg-light-gray min-h-screen">
+    
 
-    <div class="flex flex-col h-screen max-w-md mx-auto bg-white shadow-lg">
+    <div class="flex flex-col max-w-md mx-auto bg-white shadow-lg">
 
         <!-- Header dynamique -->
         <header id="appHeader" class="p-4 flex items-center justify-between border-b border-medium-gray bg-white">
@@ -75,8 +74,13 @@
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                         </svg>
                     </button>
-                </div>
 
+
+                </div>
+                
+                    <div id="mapContainer" class="mt-4">
+                        <!-- iframe sera injecté dynamiquement ici -->
+                    </div>
 
 
                 <!-- Loader -->
@@ -256,9 +260,10 @@
     </div>
 
     <!-- Interactivité -->
-<script src="./main.js" type="module"></script>
-  <script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"></script>
-  
+    <script src="./main.js">
+    </script>
+    <script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"></script>
+
 </body>
 
 </html>
