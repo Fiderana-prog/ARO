@@ -20,7 +20,7 @@
     <!-- Variables & font -->
     <style type="text/tailwindcss">
         :root{
-      --safe-green:#22c55e;
+      --safe-green:#42FF1C;
       --danger-red:#ef4444;
       --light-gray:#f9fafb;
       --medium-gray:#e5e7eb;
@@ -31,30 +31,41 @@
     }
     body{font-family:"Plus Jakarta Sans",sans-serif;}
   </style>
-    <script type="module"
-        src="https://ajax.googleapis.com/ajax/libs/@googlemaps/extended-component-library/0.6.11/index.min.js">
-    </script>
     <script type="module" src="https://unpkg.com/@googlemaps/extended-component-library">
     </script>
 </head>
 
-<body class="bg-light-gray min-h-screen">
-    
+<body class="bg-light-gray ">
+    <!-- Loader Overlay -->
+    <div id="initialLoader" class="fixed inset-0 flex flex-col items-center justify-center bg-white z-50 space-y-4">
+        <img src="logo.png" alt="Logo Aro" class="h-16 animate-pulse" />
+        <svg class="animate-spin h-10 w-10 text-primary-blue" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+        </svg>
+    </div>
 
-    <div class="flex flex-col max-w-md mx-auto bg-white shadow-lg">
+    <div class="flex flex-col max-w-md mx-auto bg-white">
 
         <!-- Header dynamique -->
-        <header id="appHeader" class="p-4 flex items-center justify-between border-b border-medium-gray bg-white">
+        <header id="appHeader"
+            class="fixed top-0 left-0 w-full z-50 p-4 flex items-center justify-between border-b border-medium-gray bg-white">
             <div></div><!-- placeholder gauche -->
-            <h1 id="headerTitle" class="text-lg font-semibold text-text-color">Carte</h1>
+
+            <a href="/" class="block">
+                <img src="logo.png" alt="Logo" class="h-8">
+            </a>
+
             <div></div><!-- placeholder droite -->
         </header>
+
 
         <!-- Contenu -->
         <main class="flex-grow overflow-y-auto bg-gray-50">
             <!-- SECTION : ACCUEIL -->
             <section id="sectionHome"
-                class="flex flex-col items-center justify-center h-[calc(100vh-100px)] px-6 space-y-6">
+                class="flex flex-col items-center justify-center h-[calc(100vh-100px)] overflow-y-auto px-6 space-y-6 mb-32 mt-16">
 
                 <!-- Bouton rond XL centré avec animation -->
                 <div class="flex justify-center">
@@ -77,10 +88,10 @@
 
 
                 </div>
-                
-                    <div id="mapContainer" class="mt-4">
-                        <!-- iframe sera injecté dynamiquement ici -->
-                    </div>
+
+                <div id="mapContainer" class="mt-4">
+                    <!-- iframe sera injecté dynamiquement ici -->
+                </div>
 
 
                 <!-- Loader -->
@@ -116,11 +127,11 @@
             <!-- SECTION : CARTE (caché) -->
 
 
-            <!-- SECTION : MAP / TRAJET ------------------------------------------------ -->
-            <section id="sectionMap" class="p-4 space-y-6">
-                <h2 class="text-xl font-semibold">Planifiez votre trajet</h2>
+            <!-- SECTION : MAP / TRAJET -->
+            <section id="sectionMap"
+                class="flex flex-col items-center justify-center h-[calc(100vh-100px)] overflow-y-auto px-6 space-y-6 mb-28 mt-16">
+                <h2 class="text-xl font-semibold mt-16">Planifiez votre trajet</h2>
 
-                <!-- Zone d’inputs ------------------------------------------------- -->
                 <div class="bg-white p-5 rounded-2xl shadow space-y-4">
                     <input id="originInput" placeholder="Lieu de départ"
                         class="w-full h-12 rounded-lg border border-gray-300 px-3 focus:ring-2 focus:ring-primary-blue outline-none" />
@@ -128,142 +139,233 @@
                     <input id="destInput" placeholder="Lieu d’arrivée"
                         class="w-full h-12 rounded-lg border border-gray-300 px-3 focus:ring-2 focus:ring-primary-blue outline-none" />
 
-                    <button id="showRoute" class="w-full bg-primary-blue text-white py-3 rounded-lg font-medium
-          hover:brightness-105 active:scale-95 transition">
-                        ➜ Afficher l’itinéraire
+                    <!-- ✅ Première photo affichée -->
+                    <img id="routeImage" src="trajet danger.png" alt="Trajet dangereux"
+                        class="w-full max-h-61 -pt-5 object-cover rounded-lg" />
+
+                    <!-- ✅ Bouton bien visible -->
+                    <button id="showRoute"
+                        class="w-[150px] bg-[#42FF1C] text-black py-3 rounded-lg font-large hover:brightness-105 active:scale-95 transition allign-items-center mx-auto flex justify-center gap-2">
+                        Afficher l’itinéraire
                     </button>
                 </div>
-                <div class="relative">
-                    <div id="myMap" class="w-full h-80 rounded-2xl shadow"></div>
+
+    </div>
+
+
+    </div>
+
+    </section>
+
+    <!-- SECTION : PACKAGING -->
+    <section id="sectionPackaging"
+        class="flex flex-col items-center justify-start min-h-[calc(100vh-100px)] overflow-y-auto px-6 space-y-6 mb-32 mt-16">
+        <h2 class="text-2xl font-bold text-text-color mb-4 mt-6">📦 Packs disponibles</h2>
+
+        <ul class="w-full max-w-lg space-y-4">
+            <!-- Province List Item Template -->
+            <!-- Repeat for each province -->
+            <li
+                class="group bg-white rounded-2xl px-6 py-5 shadow-sm border border-gray-200 flex items-center justify-between hover:shadow-lg hover:bg-gray-50 transition">
+                <div class="flex-1">
+                    <h3 class="text-xl font-semibold text-gray-900 group-hover:text-primary-blue transition">
+                        Antananarivo
+                    </h3>
+                    <p class="mt-1 text-sm text-gray-500">
+                        <span
+                            class="inline-block bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full font-medium">6000 Ar</span>
+                        <span class="ml-2 text-gray-400">/ 3 mois</span>
+                    </p>
                 </div>
-            </section>
+                <button data-province="Antananarivo" class="downloadBtn flex items-center gap-3 bg-primary-blue text-dark px-6 py-2 text-sm font-medium rounded-lg shadow-md
+           hover:bg-blue-600 active:scale-95 transition-transform" aria-label="Télécharger le pack Antananarivo">
+                    <i class="fas fa-download"></i>
+                    Télécharger
+                </button>
+            </li>
+            <li
+                class="group bg-white rounded-2xl px-6 py-5 shadow-sm border border-gray-200 flex items-center justify-between hover:shadow-lg hover:bg-gray-50 transition">
+                <div class="flex-1">
+                    <h3 class="text-xl font-semibold text-gray-900 group-hover:text-primary-blue transition">
+                        Tamatave
+                    </h3>
+                    <p class="mt-1 text-sm text-gray-500">
+                        <span
+                            class="inline-block bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full font-medium">6000 Ar</span>
+                        <span class="ml-2 text-gray-400">/ 3 mois</span>
+                    </p>
+                </div>
+                <button data-province="Antananarivo" class="downloadBtn flex items-center gap-3 bg-primary-blue text-dark px-6 py-2 text-sm font-medium rounded-lg shadow-md
+           hover:bg-blue-600 active:scale-95 transition-transform" aria-label="Télécharger le pack Antananarivo">
+                    <i class="fas fa-download"></i>
+                    Télécharger
+                </button>
+            </li>
+            <li
+                class="group bg-white rounded-2xl px-6 py-5 shadow-sm border border-gray-200 flex items-center justify-between hover:shadow-lg hover:bg-gray-50 transition">
+                <div class="flex-1">
+                    <h3 class="text-xl font-semibold text-gray-900 group-hover:text-primary-blue transition">
+                        Fianarantsoa
+                    </h3>
+                    <p class="mt-1 text-sm text-gray-500">
+                        <span
+                            class="inline-block bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full font-medium">6000 Ar</span>
+                        <span class="ml-2 text-gray-400">/ 3 mois</span>
+                    </p>
+                </div>
+                <button data-province="Antananarivo" class="downloadBtn flex items-center gap-3 bg-primary-blue text-dark px-6 py-2 text-sm font-medium rounded-lg shadow-md
+           hover:bg-blue-600 active:scale-95 transition-transform" aria-label="Télécharger le pack Antananarivo">
+                    <i class="fas fa-download"></i>
+                    Télécharger
+                </button>
+            </li>
+            <li
+                class="group bg-white rounded-2xl px-6 py-5 shadow-sm border border-gray-200 flex items-center justify-between hover:shadow-lg hover:bg-gray-50 transition">
+                <div class="flex-1">
+                    <h3 class="text-xl font-semibold text-gray-900 group-hover:text-primary-blue transition">
+                        Toliara
+                    </h3>
+                    <p class="mt-1 text-sm text-gray-500">
+                        <span
+                            class="inline-block bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full font-medium">6000 Ar</span>
+                        <span class="ml-2 text-gray-400">/ 3 mois</span>
+                    </p>
+                </div>
+                <button data-province="Antananarivo" class="downloadBtn flex items-center gap-3 bg-primary-blue text-dark px-6 py-2 text-sm font-medium rounded-lg shadow-md
+           hover:bg-blue-600 active:scale-95 transition-transform" aria-label="Télécharger le pack Antananarivo">
+                    <i class="fas fa-download"></i>
+                    Télécharger
+                </button>
+            </li>
+            <!-- /Province -->
+            <!-- ... other list items ... -->
+        </ul>
+    </section>
 
+    <!-- Updated payment modal with success toast -->
+    <div id="paymentModal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity">
+        <div class="bg-white rounded-2xl p-6 w-80 shadow-lg">
+            <h3 class="text-xl font-semibold mb-4">Valider le paiement</h3>
+            <p id="modalProvince" class="text-gray-700 mb-6">Packs pour : <span class="font-medium"></span></p>
+            <div class="space-y-4">
+                <button id="payMvola"
+                    class="w-full py-2 bg-green-400 text-black rounded-lg font-medium hover:brightness-105 transition">
+                    Mvola
+                </button>
+                <button id="payOrange"
+                    class="w-full py-2 bg-orange-500 text-white rounded-lg font-medium hover:brightness-105 transition">
+                    Orange Money
+                </button>
+            </div>
+            <button id="closeModal" class="mt-6 w-full py-2 text-sm text-gray-600 hover:underline">Annuler</button>
+        </div>
+    </div>
 
+    <!-- Success Toast -->
+    <div id="successToast"
+        class="fixed inset-0 flex items-center justify-center z-50 bg-transparent pointer-events-none opacity-0 transition-opacity duration-300">
+        <div class="bg-green-100 text-green-800 px-6 py-3 rounded-lg shadow-md flex items-center space-x-2">
+            <i class="fas fa-check-circle text-2xl"></i>
+            <span class="font-medium">Paiement réussi !</span>
+        </div>
+    </div>
+    </main>
 
-
-
-
-
-            <!-- SECTION : PACKAGING -->
-            <section id="sectionPackaging" class="p-6 space-y-4 hidden">
-                <h2 class="text-xl font-bold text-text-color mb-4">📦 Packs disponibles</h2>
-
-                <ul class="space-y-4">
-                    <!-- Province -->
-                    <li
-                        class="bg-white rounded-2xl px-5 py-4 shadow-sm border border-gray-200 flex items-center justify-between hover:shadow-md transition">
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-800">Antananarivo</h3>
-                            <p class="text-sm text-gray-500">6000 Ar / 3 mois</p>
-                        </div>
-                        <button
-                            class="flex items-center gap-2 bg-primary-blue text-white px-4 py-2 text-sm font-medium rounded-lg hover:brightness-110 transition">
-                            <i class="fas fa-download"></i> Télécharger
-                        </button>
-                    </li>
-
-                    <li
-                        class="bg-white rounded-2xl px-5 py-4 shadow-sm border border-gray-200 flex items-center justify-between hover:shadow-md transition">
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-800">Fianarantsoa</h3>
-                            <p class="text-sm text-gray-500">6000 Ar / 3 mois</p>
-                        </div>
-                        <button
-                            class="flex items-center gap-2 bg-primary-blue text-white px-4 py-2 text-sm font-medium rounded-lg hover:brightness-110 transition">
-                            <i class="fas fa-download"></i> Télécharger
-                        </button>
-                    </li>
-
-                    <li
-                        class="bg-white rounded-2xl px-5 py-4 shadow-sm border border-gray-200 flex items-center justify-between hover:shadow-md transition">
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-800">Toamasina</h3>
-                            <p class="text-sm text-gray-500">6000 Ar / 3 mois</p>
-                        </div>
-                        <button
-                            class="flex items-center gap-2 bg-primary-blue text-white px-4 py-2 text-sm font-medium rounded-lg hover:brightness-110 transition">
-                            <i class="fas fa-download"></i> Télécharger
-                        </button>
-                    </li>
-
-                    <li
-                        class="bg-white rounded-2xl px-5 py-4 shadow-sm border border-gray-200 flex items-center justify-between hover:shadow-md transition">
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-800">Mahajanga</h3>
-                            <p class="text-sm text-gray-500">6000 Ar / 3 mois</p>
-                        </div>
-                        <button
-                            class="flex items-center gap-2 bg-primary-blue text-white px-4 py-2 text-sm font-medium rounded-lg hover:brightness-110 transition">
-                            <i class="fas fa-download"></i> Télécharger
-                        </button>
-                    </li>
-
-                    <li
-                        class="bg-white rounded-2xl px-5 py-4 shadow-sm border border-gray-200 flex items-center justify-between hover:shadow-md transition">
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-800">Toliara</h3>
-                            <p class="text-sm text-gray-500">6000 Ar / 3 mois</p>
-                        </div>
-                        <button
-                            class="flex items-center gap-2 bg-primary-blue text-white px-4 py-2 text-sm font-medium rounded-lg hover:brightness-110 transition">
-                            <i class="fas fa-download"></i> Télécharger
-                        </button>
-                    </li>
-
-                    <li
-                        class="bg-white rounded-2xl px-5 py-4 shadow-sm border border-gray-200 flex items-center justify-between hover:shadow-md transition">
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-800">Antsiranana</h3>
-                            <p class="text-sm text-gray-500">6000 Ar / 3 mois</p>
-                        </div>
-                        <button
-                            class="flex items-center gap-2 bg-primary-blue text-white px-4 py-2 text-sm font-medium rounded-lg hover:brightness-110 transition">
-                            <i class="fas fa-download"></i> Télécharger
-                        </button>
-                    </li>
-                </ul>
-            </section>
-
-        </main>
-
-        <!-- Footer -->
-        <footer class="fixed bottom-4 left-1/2 -translate-x-1/2 w-[92%] max-w-md mx-auto
+    <!-- Footer -->
+    <footer class="fixed bottom-4 left-1/2 -translate-x-1/2 w-[92%] max-w-md mx-auto
                 bg-white rounded-full shadow-xl flex justify-around items-center px-4 py-2
                 border border-gray-100">
 
-            <button id="navHome" class="group flex items-center justify-center flex-1 py-2 px-3
+        <button id="navHome" class="group flex items-center justify-center flex-1 py-2 px-3
+                rounded-full transition-all duration-300
+                text-gray-500 group-[.active]:bg-[#42FF1C] group-[.active]:text-white
+                hover:bg-blue-50 hover:text-primary-blue">
+            <i class="fas fa-house text-lg text-black  transition-all duration-300 group-[.active]:text-white"></i>
+
+        </button>
+
+        <button id="navMap" class="group flex items-center justify-center flex-1 py-2 px-3
+                rounded-full transition-all duration-300
+                text-gray-500 group-[.active]:bg- group-[.active]:text-white
+                hover:bg-blue-50 hover:text-primary-blue">
+            <i
+                class="fas fa-map-location-dot text-black  text-lg transition-all duration-300 group-[.active]:text-white"></i>
+
+        </button>
+
+        <button id="navPackaging" class="group flex items-center justify-center flex-1 py-2 px-3
                 rounded-full transition-all duration-300
                 text-gray-500 group-[.active]:bg-primary-blue group-[.active]:text-white
                 hover:bg-blue-50 hover:text-primary-blue">
-                <i class="fas fa-house text-lg text-black  transition-all duration-300 group-[.active]:text-white"></i>
+            <i class="fas fa-box-open text-lg text-black  transition-all duration-300 group-[.active]:text-white"></i>
+        </button>
 
-            </button>
-
-            <button id="navMap" class="group flex items-center justify-center flex-1 py-2 px-3
-                rounded-full transition-all duration-300
-                text-gray-500 group-[.active]:bg-primary-blue group-[.active]:text-white
-                hover:bg-blue-50 hover:text-primary-blue">
-                <i
-                    class="fas fa-map-location-dot text-black  text-lg transition-all duration-300 group-[.active]:text-white"></i>
-
-            </button>
-
-            <button id="navPackaging" class="group flex items-center justify-center flex-1 py-2 px-3
-                rounded-full transition-all duration-300
-                text-gray-500 group-[.active]:bg-primary-blue group-[.active]:text-white
-                hover:bg-blue-50 hover:text-primary-blue">
-                <i
-                    class="fas fa-box-open text-lg text-black  transition-all duration-300 group-[.active]:text-white"></i>
-            </button>
-
-        </footer>
+    </footer>
     </div>
 
     <!-- Interactivité -->
     <script src="./main.js">
     </script>
     <script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"></script>
+    <script>
+        document.getElementById('showRoute').addEventListener('click', function () {
+            const image = document.getElementById('routeImage');
+            image.src = 'safe.png';
+        });
+    </script>
+    <script>
+        // Open payment modal
+        document.querySelectorAll('.downloadBtn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const province = btn.getAttribute('data-province');
+                document.querySelector('#modalProvince span').textContent = province;
+                const modal = document.getElementById('paymentModal');
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+            });
+        });
 
+        // Close modal function
+        function closeModal() {
+            const modal = document.getElementById('paymentModal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+        document.getElementById('closeModal').addEventListener('click', closeModal);
+
+        // Show success toast for 5 seconds
+        function showSuccessToast() {
+            const toast = document.getElementById('successToast');
+            // make it visible and allow pointer-events
+            toast.classList.remove('opacity-0');
+            toast.classList.remove('pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                toast.classList.add('pointer-events-none');
+            }, 5000);
+        }
+
+        // Fake payment handlers
+        document.getElementById('payMvola').addEventListener('click', () => {
+            showSuccessToast();
+            closeModal();
+        });
+        document.getElementById('payOrange').addEventListener('click', () => {
+            showSuccessToast();
+            closeModal();
+        });
+    </script>
+    <script>
+        // Wait for DOM
+        document.addEventListener('DOMContentLoaded', () => {
+            const loader = document.getElementById('initialLoader');
+            const app = document.getElementById('appContent');
+            // After 5 seconds, hide loader and show app
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                app.classList.remove('opacity-0', 'pointer-events-none');
+            }, 2000);
+        });
+    </script>
 </body>
 
 </html>

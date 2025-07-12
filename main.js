@@ -24,8 +24,8 @@ const highRiskZones = [{
         lng: 47.5298
     }
 ];
-const RISK_RADIUS = 200;
-const UPDATE_INTERVAL = 5000;
+const RISK_RADIUS = 1000;
+const UPDATE_INTERVAL = 10000;
 
 const toRad = d => d * Math.PI / 180;
 
@@ -76,19 +76,19 @@ function setActive(tab) {
             navHome.classList.add('text-primary-blue', 'bg-blue-50',
                 'font-bold', 'shadow-inner');
             sectionHome.classList.remove('hidden');
-            headerTitle.textContent = 'Accueil';
+           
             break;
         case 'map':
             navMap.classList.add('text-primary-blue', 'bg-blue-50',
                 'font-bold', 'shadow-inner');
             sectionMap.classList.remove('hidden');
-            headerTitle.textContent = 'Carte';
+            
             break;
         case 'packages':
             navPackaging.classList.add('text-primary-blue', 'bg-blue-50',
                 'font-bold', 'shadow-inner');
             sectionPackaging.classList.remove('hidden');
-            headerTitle.textContent = 'Packages';
+        
             break;
     }
 }
@@ -200,6 +200,11 @@ async function updatePosition() {
 // ==================================
 //  CALCUL & AFFICHAGE DES ZONES
 // ==================================
+
+
+// 
+
+
 const notified = new Set();
 
 function checkHighRisk(lat, lng) {
@@ -230,6 +235,8 @@ function renderNearbyZones(list) {
         )
         .join('');
 }
+
+
 
 // ==========================
 //  NOTIFICATIONS (facultatif)
