@@ -22,7 +22,13 @@ const highRiskZones = [{
         name: 'Isoraka',
         lat: -18.9102,
         lng: 47.5298
-    }
+    },
+    {
+        name: 'Ankatso',
+        lat: -18.853385,
+        lng: 47.511596
+    },
+
 ];
 const RISK_RADIUS = 1000;
 const UPDATE_INTERVAL = 10000;
